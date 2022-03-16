@@ -1,0 +1,17 @@
+#!/usr/bin/env sh
+
+PROJECT_DIR="${PROJECT_DIR:-$HOME/Projects}"
+
+if [ $# = 0 ]
+then
+	echo "$(realpath "$PROJECT_DIR/current")"
+else
+	[ -z "$1" ] \
+	&& echo "PROJECT cannot be empty!" >&2 && exit 1
+
+	find "$PROJECT_DIR" \
+		-type d -path "*/$1" \
+		-exec ln -sf -T {} ~/Projects/current \; \
+		-exec echo {} \; \
+	|| echo "Could not find $1" >&2
+fi
