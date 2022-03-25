@@ -1,0 +1,7 @@
+function chproj() # [PROJECT]
+{
+	! [ $# = 0 ] && [ "$1" = "zle_bracketed_paste" ] && shift
+	cd "$(command chproj "$@")"
+}
+
+chproj
