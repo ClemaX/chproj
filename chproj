@@ -2,16 +2,19 @@
 
 PROJECT_DIR="${PROJECT_DIR:-$HOME/Projects}"
 
+PROJECT_CURR="$PROJECT_DIR/current"
+
 if [ $# = 0 ]
 then
-	echo "$(realpath "$PROJECT_DIR/current")"
+	echo "$(realpath "$PROJECT_CURR")"
 else
 	[ -z "$1" ] \
 	&& echo "PROJECT cannot be empty!" >&2 && exit 1
 
 	find "$PROJECT_DIR" \
 		-type d -path "*/$1" \
-		-exec ln -sf -T {} ~/Projects/current \; \
-		-exec echo {} \; \
+		-exec rm -f "$PROJECT_CURR" ';' \
+		-exec ln -sf {} "$PROJECT_CURR" ';' \
+		-exec echo {} ';' \
 	|| echo "Could not find $1" >&2
 fi
