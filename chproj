@@ -11,10 +11,17 @@ else
 	[ -z "$1" ] \
 	&& echo "PROJECT cannot be empty!" >&2 && exit 1
 
-	find "$PROJECT_DIR" \
-		-type d -path "*/$1" \
-		-exec rm -f "$PROJECT_CURR" ';' \
-		-exec ln -sf {} "$PROJECT_CURR" ';' \
-		-exec echo {} ';' \
-	|| echo "Could not find $1" >&2
+	if [ -d "$1" ]
+	then
+		rm -f "$PROJECT_CURR"
+		ln -sf "$(realpath "$1")" "$PROJECT_CURR"
+		echo "$(realpath "$PROJECT_CURR")"
+	else
+		find "$PROJECT_DIR" \
+			-type d -path "*/$1" \
+			-exec rm -f "$PROJECT_CURR" ';' \
+			-exec ln -sf {} "$PROJECT_CURR" ';' \
+			-exec echo {} ';' \
+		|| echo "Could not find $1" >&2
+	fi
 fi
